@@ -4,7 +4,7 @@ import sys
 
 def parse(opened_file):
     lst = []
-    pattern = re.compile("[\s0-9].\/.[0-9]")
+    pattern = re.compile("[\s0-9]*\/.*[0-9]")
     for line in opened_file:
         match = pattern.search(line)
         if match:
@@ -49,20 +49,30 @@ def main():
     try:
         #get only the .txt file names in the curr_directory
         files = [txtfile for txtfile in os.listdir(directory) if re.match(r'(.*?)\.txt', txtfile)]
+        files.sort()
     except OSError:
         print(directory + ": (directory does not exists...)")
         sys.exit(1)    #exit with failure status
-
+    save = input("Would you like to save the totals to their respective files (y/n)? ")
+    writeto = False
+    if save.lower() == 'y':
+        writeto = True
+    grades = []
     for file_name in files:
         f = open(directory + '/' + file_name, 'r')    #open for reading and appending
         value_lst = parse(f)
         finaltotal = calculate(value_lst, file_name)
         if finaltotal != None:
-            print(finaltotal)
-            writefile = open(directory + '/' + file_name, 'a')
-            writefile.write("\n" + finaltotal + "\n")
-            writefile.close()
+            grades.append(finaltotal)
+            if writeto:
+                writefile = open(directory + '/' + file_name, 'a')
+                writefile.write("\n" + finaltotal + "\n")
+                writefile.close()
         f.close()
+    printgrades = input("Would you like to see all grades (y/n)?")
+    if printgrades.lower() == 'y':
+        for grade in grades:
+            print(grade)
     sys.exit(0)
 
 main()
