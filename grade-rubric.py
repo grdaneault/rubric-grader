@@ -11,8 +11,34 @@ def parse(opened_file):
             lst.append(match.group(0))
     return lst
 
-def calculate(values):
-    print(values)
+def calculate(values, name):
+    answer = False
+    totalpossible = 0
+    totalearned = 0
+    pattern = re.compile("[0-9]")
+    for scores in values:
+        points = pattern.findall(scores)
+        if len(points) == 2:
+            totalearned += int(points[0])
+            totalpossible += int(points[1])
+        else:
+            if not answer:
+                msg = "All grades were not entered for " + name + " would you like to continue anyway (y/n)? "
+                userinput = input(msg)
+                if userinput.lower() == 'y':
+                    answer = True
+                    totalpossible += int(points[0])
+                    continue
+                elif userinput.lower() == 'n':
+                    print("Skipping " + name + "...")
+                    return
+                else:
+                    print("Not a valid answer skipping " + name + "...")
+                    return
+            else:
+                totalpossible += int(points[0])
+
+    return name + '--> Total: ' + str(totalearned) + ' / ' + str(totalpossible)
 
 def main():
     try:
@@ -28,8 +54,15 @@ def main():
         sys.exit(1)    #exit with failure status
 
     for file_name in files:
-        f = open(directory + '/' + file_name, 'r')
+        f = open(directory + '/' + file_name, 'r')    #open for reading and appending
         value_lst = parse(f)
-        calculate(value_lst)
+        finaltotal = calculate(value_lst, file_name)
+        if finaltotal != None:
+            print(finaltotal)
+            writefile = open(directory + '/' + file_name, 'a')
+            writefile.write("\n" + finaltotal + "\n")
+            writefile.close()
+        f.close()
+    sys.exit(0)
 
 main()
