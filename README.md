@@ -1,6 +1,9 @@
 # rubric-grader
 Grade rubric parser and calculator.
 ==============
+
+Developed for python version: 3.4.2 or higher
+
 This program looks in the specified or current directory for .txt files. It then parses through them and calculates
 the grades for each file.
 
