@@ -20,4 +20,4 @@ The format of the rubric should be something as follows:
 
 The program first parses on '2 / 2' using a regular expression which can have any number of spaces between the numbers and '/' symbol and any number greater than or equal to 0.
 
-You can also choose to write the total grade to the end of the text files.
+You can also choose to write the total grade to the end of the text files, on program completion it prints out all the grades in alphabetical order.
